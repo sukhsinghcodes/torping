@@ -1,0 +1,41 @@
+##########
+# If adding to this file, think about updating .eslintignore too
+##########
+
+# General #
+##########
+build/
+coverage/
+dist/
+vars/
+vendor/
+.cache/
+public/
+CHANGELOG.md
+generated/
+.yarn
+.github/workflows
+diagnostics/**.md
+*.tfstate
+**/.gen
+
+# CDK #
+##########
+cdk.out
+\#current-cloud-backend
+
+# Storybook #
+##########
+storybook-static/
+
+# Webdriverio #
+##########
+reports/
+
+# Pact #
+########
+pact/*.json
+
+# Auth0 Templates #
+##########
+packages/noah-infra/src/admin/auth0/clients/noah-app.json
