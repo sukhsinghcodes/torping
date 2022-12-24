@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "ts-node src/index",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,12 +18,17 @@
     "url": "https://github.com/sukhsinghcodes/torping/issues"
   },
   "homepage": "https://github.com/sukhsinghcodes/torping#readme",
-  "dependencies": {
+  "devDependencies": {
     "@types/node": "^18.6.2",
+    "@types/nodemailer": "^6.4.4",
     "@typescript-eslint/eslint-plugin": "^5.31.0",
+    "dotenv": "^16.0.1",
     "eslint": "^8.20.0",
-    "tor-request": "^3.1.0",
     "ts-node": "^10.9.1",
     "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "nodemailer": "^6.7.7",
+    "tor-request": "^3.1.0"
   }
 }

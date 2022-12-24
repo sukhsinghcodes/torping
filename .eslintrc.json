@@ -10,7 +10,7 @@
   "rules": {
     "arrow-spacing": ["warn", { "before": true, "after": true }],
     "brace-style": ["error", "1tbs", { "allowSingleLine": false }],
-    "comma-dangle": ["error", "always-multiline"],
+    "comma-dangle": ["error", "only-multiline"],
     "comma-spacing": "error",
     "comma-style": "error",
     "curly": ["error", "multi-line", "consistent"],
