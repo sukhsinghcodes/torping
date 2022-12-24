@@ -1,33 +1,27 @@
 import * as nodemailer from 'nodemailer';
+import nodemailerSendgrid from 'nodemailer-sendgrid';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-console.log(process.env.GMAIL_REFRESH_TOKEN);
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    type: 'OAuth2',
-    user: process.env.GMAIL_USER,
-    accessToken: process.env.GMAIL_ACCESS_TOKEN,
-    refreshToken: process.env.GMAIL_REFRESH_TOKEN,
-    clientId: process.env.GMAIL_CLIENT_ID,
-    clientSecret: process.env.GMAIL_CLIENT_SECRET,
-  },
-});
+const transporter = nodemailer.createTransport(
+  nodemailerSendgrid({
+    apiKey: process.env.SENDGRID_API_KEY,
+  })
+);
 
 const mailConfig = {
-  from: 'tor.monitor.app@gmail.com',
-  to: 'sukhvinder@durhailay.co',
+  from: process.env.FROM_EMAIL,
+  to: process.env.TEST_EMAIL,
   subject: 'Your TOR site is down!',
 };
 
 export function sendMail(message: string): void {
-  transporter.sendMail({ ...mailConfig, text: message }, (err, info) => {
+  transporter.sendMail({ ...mailConfig, text: message }, (err) => {
     if (err) {
       console.error(err);
     }
 
-    console.log(info);
+    console.log('Email sent!');
   });
 }
