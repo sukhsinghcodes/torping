@@ -2,11 +2,10 @@ import * as tr from 'tor-request';
 import { sendMail } from './mail';
 
 // In mintues as you don't really want to make TOR requests often
-const pollIntervalOptions = [10000, 30, 60];
+const pollIntervalOptions = [10, 30, 60, 1];
 
-const inputUrl = 'http://dwigb6uzyyj5qfpdojkgpv7q3ccn6cwh5u6wem65cnlcmus3dmtuj4yd.onion';
-// const inputUrl = 'http://wasabiukrxmkdgve5kynjztuovbg43uxcbcxn6y2okcrsg7gb6jdmbad.oniondd';
-const inputPollInterval = pollIntervalOptions[0];
+const inputUrl = 'http://wasabiukrxmkdgve5kynjztuovbg43uxcbcxn6y2okcrsg7gb6jdmbad.onion/';
+const inputPollIntervalMinutes = pollIntervalOptions[3];
 
 interface Response {
   statusCode: number;
@@ -39,8 +38,8 @@ function ping(url: string) {
 }
 
 ping(inputUrl);
-// if (inputPollInterval > 0) {
-//   setInterval(() => {
-//     ping(inputUrl);
-//   }, inputPollInterval);
-// }
+if (inputPollIntervalMinutes > 0) {
+  setInterval(() => {
+    ping(inputUrl);
+  }, inputPollIntervalMinutes * 60000);
+}
