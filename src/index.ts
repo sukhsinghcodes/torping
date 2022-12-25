@@ -7,12 +7,12 @@ const pollIntervalOptions = [10, 30, 60, 1];
 const inputUrl = 'http://wasabiukrxmkdgve5kynjztuovbg43uxcbcxn6y2okcrsg7gb6jdmbad.onion/';
 const inputPollIntervalMinutes = pollIntervalOptions[3];
 
-interface Response {
+interface IResponse {
   statusCode: number;
   statusMessage: string;
 }
 
-function handlePing(err: unknown, res: Response): void {
+function handlePing(err: unknown, res: IResponse): void {
   if (err) {
     console.error('Offline ❌');
     console.error(err);
