@@ -12,14 +12,17 @@ const transporter = nodemailer.createTransport(
 
 const mailConfig = {
   from: process.env.FROM_EMAIL,
-  to: process.env.TEST_EMAIL,
-  subject: 'Your TOR site is down!',
+  to: process.env.TO_EMAIL,
+  subject: 'Your site is down!',
+  text: 'Your site is down!',
+  html: 'Your site is down!',
 };
 
 export function sendMail(message: string): void {
-  transporter.sendMail({ ...mailConfig, text: message }, (err) => {
+  transporter.sendMail({ ...mailConfig, text: message, html: message }, (err) => {
     if (err) {
-      console.error(err);
+      console.error(JSON.stringify(err));
+      return;
     }
 
     console.log('Email sent!');

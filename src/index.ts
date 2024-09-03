@@ -1,45 +1,51 @@
 import * as tr from 'tor-request';
-import { sendMail } from './mail';
+import ping from 'ping';
+import { sendMessage } from './telegram';
 
-// In mintues as you don't really want to make TOR requests often
-const pollIntervalOptions = [10, 30, 60, 1];
-
-const inputUrl = 'http://wasabiukrxmkdgve5kynjztuovbg43uxcbcxn6y2okcrsg7gb6jdmbad.onion/';
-const inputPollIntervalMinutes = pollIntervalOptions[3];
+// const inputUrl = 'http://wasabiukrxmkdgve5kynjztuovbg43uxcbcxn6y2okcrsg7gb6jdmbad.onion/';
+const pollIntervalMinutes = 60;
+const hosts = process.env.HOSTS.split(',');
 
 interface IResponse {
   statusCode: number;
   statusMessage: string;
 }
 
-function handlePing(err: unknown, res: IResponse): void {
-  if (err) {
-    console.error('Offline ❌');
-    console.error(err);
-    sendMail(`Offline ❌\n\nAn error occurred: ${err}`);
+function handlePing(host: string, isAlive: boolean): void {
+  if (!isAlive) {
+    console.log(`${host} is offline ❌`);
+    sendMessage(`*${host}* is offline ❌`);
+    return;
   }
 
-  if (res) {
-    if (res.statusCode >= 400) {
-      console.log('The service is online but has an application error 😔');
-      console.log(`Status: ${res.statusCode} ${res.statusMessage}`);
-      sendMail(
-        `The service is online but has an application error 😔\n\nStatus: ${res.statusCode} ${res.statusMessage}`
-      );
-      return;
+  console.log(`${host} is online ✅`);
+}
+
+function torping(host: string) {
+  console.log('Pinging', host);
+  tr.request(host, (err: unknown, res: IResponse) => {
+    let isAlive = true;
+
+    if (err || (res && res.statusCode >= 400) || !res) {
+      isAlive = false;
     }
-    console.log('Online ✅');
-  }
+
+    handlePing(host, isAlive);
+  });
 }
 
-function ping(url: string) {
-  console.log('Pinging', url);
-  tr.request(url, handlePing);
+function webping(host: string) {
+  ping.sys.probe(host, function (isAlive) {
+    console.log('Pinging', host, isAlive ? '✅' : '❌');
+    handlePing(host, isAlive);
+  });
 }
 
-ping(inputUrl);
-if (inputPollIntervalMinutes > 0) {
+// Start the pinging
+hosts.forEach((host) => webping(host));
+
+if (pollIntervalMinutes > 0) {
   setInterval(() => {
-    ping(inputUrl);
-  }, inputPollIntervalMinutes * 60000);
+    hosts.forEach((host) => webping(host));
+  }, pollIntervalMinutes * 60000);
 }
